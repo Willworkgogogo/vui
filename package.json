@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --open --config ./config/webpack.base.config.js",
+    "start": "npm run build:dll && webpack-dev-server --open --config ./config/webpack.base.config.js",
     "build:dll": "webpack --config ./config/webpack.vendor.config.js",
     "storybook": "start-storybook"
   },
