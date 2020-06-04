@@ -1,1 +1,3 @@
-export const Const = {};
+export const Const = {
+  DATE_YMD: 'YYYY-MM-DD'
+};

@@ -1,6 +1,9 @@
 import * as React from 'react';
+import * as moment from 'moment';
+import classnames from 'classnames';
 import { isLeepYear, fillZero } from '@/utils';
 import { Month, FebruaryDays } from '@/utils/types';
+import { Const } from '@/utils/const';
 import { Wrap, WrapHead, WrapWeekHead, WrapTd } from './styles';
 
 interface ITdProps {
@@ -15,9 +18,13 @@ class Calendar extends React.Component {
 
   constructor(props: any) {
     super(props);
+    const date = new Date();
     this.state = {
-      year: 0,
-      month: 0
+      year: date.getFullYear,
+      month: date.getMonth,
+      day: date.getDate(),
+      today: moment().format(Const.DATE_YMD),
+      selectedDate: moment().format(Const.DATE_YMD)
     };
   }
 
@@ -110,11 +117,16 @@ class Calendar extends React.Component {
       const weekLen = Calendar.WEEK_NAMES.length;
       const startIndex = line * weekLen;
       const endIndex = startIndex + weekLen;
-      return days.slice(startIndex, endIndex).map((item, i) => (
-        <WrapTd className={item.needHighlight ? '' : 'grey'} key={i}>
-          {fillZero(item.day)}
-        </WrapTd>
-      ));
+      return days.slice(startIndex, endIndex).map((item, i) => {
+        const classname = classnames({
+          grey: !item.needHighlight
+        });
+        return (
+          <WrapTd className={classname} key={i}>
+            {fillZero(item.day)}
+          </WrapTd>
+        );
+      });
     };
 
     return (
