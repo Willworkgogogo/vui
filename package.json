@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npm run build:dll && webpack-dev-server --open --config ./config/webpack.base.config.js",
     "build:dll": "webpack --config ./config/webpack.vendor.config.js",
-    "storybook": "start-storybook"
+    "storybook": "start-storybook",
+    "build-storybook": "build-storybook -c .storybook -o ./public"
   },
   "author": "will_workhard@163.com",
   "license": "ISC",
