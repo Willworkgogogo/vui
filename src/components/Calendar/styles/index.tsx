@@ -5,7 +5,7 @@ interface IWrap {
   fullscreen?: boolean;
 }
 
-const CalendarHeadHeight = 36;
+const CalendarHeadHeight = 40;
 
 export const Wrap = styled.div<IWrap>`
   width: ${props => (props.fullscreen ? '100%' : '300px')};
@@ -21,9 +21,20 @@ export const Wrap = styled.div<IWrap>`
 export const WrapHead = styled.div`
   height: ${CalendarHeadHeight}px;
   line-height: ${CalendarHeadHeight}px;
+  text-align: center;
   border-radius: 5px 5px 0 0;
   color: ${themeConfig.white};
   background-color: ${themeConfig.blue};
+  .ml20 {
+    margin-left: 20px;
+    cursor: pointer;
+    outline: none;
+  }
+  .mr20 {
+    margin-right: 20px;
+    cursor: pointer;
+    outline: none;
+  }
 `;
 
 export const WrapWeekHead = styled.tr`
@@ -32,15 +43,27 @@ export const WrapWeekHead = styled.tr`
 `;
 
 export const WrapTd = styled.td`
+  padding: 4px;
   color: ${themeConfig.fontBlack};
   text-align: center;
   cursor: pointer;
   outline: none;
-  &:hover {
+  &.grey {
+    color: ${themeConfig.grey};
+  }
+  &.active span {
     color: ${themeConfig.white};
     background-color: ${themeConfig.blue};
   }
-  &.grey {
-    color: ${themeConfig.grey};
+  span {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    &:hover {
+      color: ${themeConfig.white};
+      background-color: ${themeConfig.blue};
+    }
   }
 `;

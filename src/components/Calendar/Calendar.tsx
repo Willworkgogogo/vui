@@ -1,30 +1,41 @@
 import * as React from 'react';
-import * as moment from 'moment';
 import classnames from 'classnames';
 import { isLeepYear, fillZero } from '@/utils';
 import { Month, FebruaryDays } from '@/utils/types';
 import { Const } from '@/utils/const';
 import { Wrap, WrapHead, WrapWeekHead, WrapTd } from './styles';
 
+type monthType = 'pre' | 'current' | 'next';
+type directionType = 'pre' | 'next';
+
 interface ITdProps {
   day: number;
-  needHighlight: boolean;
+  monthType: monthType;
 }
 
-class Calendar extends React.Component {
+interface ICalendarProps {
+  /* 日期选中后的回调 */
+  onSelect?: (date: Date) => void;
+}
+
+interface ICalendarState {
+  year: number;
+  month: number;
+  day: number;
+}
+
+class Calendar extends React.Component<ICalendarProps, ICalendarState> {
   static readonly WEEK_NAMES = ['日', '一', '二', '三', '四', '五', '六'];
   static readonly MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   static readonly LINES = [0, 1, 2, 3, 4, 5];
 
-  constructor(props: any) {
+  constructor(props: ICalendarProps) {
     super(props);
     const date = new Date();
     this.state = {
-      year: date.getFullYear,
-      month: date.getMonth,
-      day: date.getDate(),
-      today: moment().format(Const.DATE_YMD),
-      selectedDate: moment().format(Const.DATE_YMD)
+      year: date.getFullYear(),
+      month: date.getMonth(),
+      day: date.getDate()
     };
   }
 
@@ -87,15 +98,42 @@ class Calendar extends React.Component {
     return new Array(afterDays).fill(0).map((_, i: number) => i + 1);
   };
 
-  getRenderDays = (year: number, month: number): ITdProps[] => {
-    const formatTdItem = (days: number[], needHighlight: boolean = false) =>
-      days.map(day => ({ day, needHighlight }));
-    const beforeDays = formatTdItem(this.getBeforeDays(year, month));
-    const afterDays = formatTdItem(this.getAfterDays(year, month));
+  getRenderFullDays = (year: number, month: number): ITdProps[] => {
+    const formatTdItem = (days: number[], monthType: monthType) =>
+      days.map(day => ({ day, monthType }));
+    const beforeDays = formatTdItem(this.getBeforeDays(year, month), 'pre');
+    const afterDays = formatTdItem(this.getAfterDays(year, month), 'next');
     const date = this.getDateByYearMonthDay(year, month);
-    const monthDays = formatTdItem(this._getFilledMonthDays(date), true);
+    const monthDays = formatTdItem(this._getFilledMonthDays(date), 'current');
     const days = beforeDays.concat(monthDays, afterDays);
     return days;
+  };
+
+  onDaySelect = (day: number, monthType: monthType) => {
+    const { year, month } = this.state;
+    console.log(day, monthType);
+    this.setState({ day });
+    this.props.onSelect && this.props.onSelect(new Date());
+  };
+
+  onChangeYear = (direction: directionType) => {
+    let { year } = this.state;
+    if (direction === 'next') {
+      year += 1;
+    } else {
+      year -= 1;
+    }
+    this.setState({ year });
+  };
+
+  onChangeMonth = (direction: directionType) => {
+    let { month } = this.state;
+    if (direction === 'next') {
+      month === Month.December ? (month = Month.January) : (month += 1);
+    } else {
+      month === Month.January ? (month = Month.December) : (month -= 1);
+    }
+    this.setState({ month });
   };
 
   renderTableHead = () => {
@@ -111,19 +149,24 @@ class Calendar extends React.Component {
   };
 
   renderTableBody = () => {
-    const days = this.getRenderDays(2020, 6);
-
+    const { year, month } = this.state;
+    const days = this.getRenderFullDays(year, month);
     const renderTd = (line: number) => {
       const weekLen = Calendar.WEEK_NAMES.length;
       const startIndex = line * weekLen;
       const endIndex = startIndex + weekLen;
       return days.slice(startIndex, endIndex).map((item, i) => {
+        const isCurrentMonthDay = item.monthType === 'current';
         const classname = classnames({
-          grey: !item.needHighlight
+          grey: !isCurrentMonthDay
         });
         return (
-          <WrapTd className={classname} key={i}>
-            {fillZero(item.day)}
+          <WrapTd
+            onClick={() => this.onDaySelect(item.day, item.monthType)}
+            className={classname}
+            key={i}
+          >
+            <span>{fillZero(item.day)}</span>
           </WrapTd>
         );
       });
@@ -139,9 +182,28 @@ class Calendar extends React.Component {
   };
 
   renderCalendar = () => {
+    const { year, month } = this.state;
     return (
       <Wrap>
-        <WrapHead>2020年06月</WrapHead>
+        <WrapHead>
+          <div>
+            <span className="mr20" onClick={() => this.onChangeYear('pre')}>
+              《
+            </span>
+            <span className="mr20" onClick={() => this.onChangeMonth('pre')}>
+              {'<'}
+            </span>
+            <span>
+              {year}年{fillZero(month + 1)}月
+            </span>
+            <span className="ml20" onClick={() => this.onChangeMonth('next')}>
+              {'>'}
+            </span>
+            <span className="ml20" onClick={() => this.onChangeYear('next')}>
+              》
+            </span>
+          </div>
+        </WrapHead>
         <table className="table">
           {this.renderTableHead()}
           {this.renderTableBody()}
