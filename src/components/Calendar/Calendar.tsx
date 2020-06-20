@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as moment from 'moment';
 import classnames from 'classnames';
 import { isLeepYear, fillZero } from '@/utils';
 import { Month, FebruaryDays } from '@/utils/types';
@@ -15,38 +16,40 @@ interface ITdProps {
 
 interface ICalendarProps {
   /* 日期选中后的回调 */
-  onSelect?: (date: Date) => void;
+  onSelect?: (date: string) => void;
 }
 
 interface ICalendarState {
   year: number;
   month: number;
-  day: number;
+  selectedDate: string;
 }
 
 class Calendar extends React.Component<ICalendarProps, ICalendarState> {
   static readonly WEEK_NAMES = ['日', '一', '二', '三', '四', '五', '六'];
   static readonly MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   static readonly LINES = [0, 1, 2, 3, 4, 5];
+  static readonly FORMAT_DATE = 'M/D/YYYY';
 
   constructor(props: ICalendarProps) {
     super(props);
     const date = new Date();
     this.state = {
       year: date.getFullYear(),
-      month: date.getMonth(),
-      day: date.getDate()
+      month: this._getMonth(date),
+      selectedDate: ''
     };
   }
 
   _getFullYear = (date: Date) => date.getFullYear();
 
-  _getMonth = (date: Date) => date.getMonth();
+  _getMonth = (date: Date) => date.getMonth() + 1;
 
   setCurrentYearMonth = (date: Date) => {
     this.setState({
       year: this._getFullYear(date),
-      month: this._getMonth(date)
+      month: this._getMonth(date),
+      selectedDate: ''
     });
   };
 
@@ -56,11 +59,11 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
     if (month === Month.February) {
       return isLeepYear(year) ? FebruaryDays.leepYear : FebruaryDays.commonYear;
     }
-    return Calendar.MONTH_DAYS[month];
+    return Calendar.MONTH_DAYS[month - 1];
   };
 
   getDateByYearMonthDay = (year: number, month: number, day: number = 1): Date => {
-    return new Date(year, month, day);
+    return new Date(year, month - 1, day);
   };
 
   getWeekOfMonthFirstDay = (year: number, month: number): number => {
@@ -109,14 +112,7 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
     return days;
   };
 
-  onDaySelect = (day: number, monthType: monthType) => {
-    const { year, month } = this.state;
-    console.log(day, monthType);
-    this.setState({ day });
-    this.props.onSelect && this.props.onSelect(new Date());
-  };
-
-  onChangeYear = (direction: directionType) => {
+  onYearChange = (direction: directionType) => {
     let { year } = this.state;
     if (direction === 'next') {
       year += 1;
@@ -126,14 +122,46 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
     this.setState({ year });
   };
 
-  onChangeMonth = (direction: directionType) => {
+  onMonthChange = (direction: directionType) => {
     let { month } = this.state;
+    const year = this.getYearOnMonthChange(month, direction);
     if (direction === 'next') {
       month === Month.December ? (month = Month.January) : (month += 1);
     } else {
       month === Month.January ? (month = Month.December) : (month -= 1);
     }
-    this.setState({ month });
+    this.setState({ year, month });
+  };
+
+  onDaySelect = (day: number, monthType: monthType) => {
+    let { year, month } = this.state;
+    let selectedDate = '';
+    if (monthType === 'current') {
+      selectedDate = `${month}/${day}/${year}`;
+    }
+    if (monthType === 'next') {
+      month === Month.December ? (month = Month.January) : (month += 1);
+      year === Month.December ? (year += 1) : year;
+      selectedDate = `${month}/${day}/${year}`;
+    }
+    if (monthType === 'pre') {
+      month === Month.January ? (month = Month.December) : (month -= 1);
+      year = Month.January ? (year -= 1) : year;
+      selectedDate = `${month}/${day}/${year}`;
+    }
+    this.setState({ year, month, selectedDate });
+    this.props.onSelect && this.props.onSelect(selectedDate);
+  };
+
+  getYearOnMonthChange = (month: number, direction: directionType): number => {
+    let { year } = this.state;
+    if (direction === 'next' && month === Month.December) {
+      year += 1;
+    }
+    if (direction === 'pre' && month === Month.January) {
+      year -= 1;
+    }
+    return year;
   };
 
   renderTableHead = () => {
@@ -149,23 +177,30 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
   };
 
   renderTableBody = () => {
-    const { year, month } = this.state;
+    const { year, month, selectedDate } = this.state;
     const days = this.getRenderFullDays(year, month);
+    const isToday = (day: number) =>
+      `${month}/${day}/${year}` === moment().format(Calendar.FORMAT_DATE);
+    const isSelected = (day: number, monthType: monthType) => {
+      if (selectedDate) {
+        return selectedDate === `${month}/${day}/${year}`;
+      }
+      return false;
+    };
     const renderTd = (line: number) => {
       const weekLen = Calendar.WEEK_NAMES.length;
       const startIndex = line * weekLen;
       const endIndex = startIndex + weekLen;
       return days.slice(startIndex, endIndex).map((item, i) => {
-        const isCurrentMonthDay = item.monthType === 'current';
+        const { day, monthType } = item;
+        const isCurrentMonthDay = monthType === 'current';
         const classname = classnames({
-          grey: !isCurrentMonthDay
+          grey: !isCurrentMonthDay,
+          active: isToday(day, monthType),
+          selected: isSelected(day)
         });
         return (
-          <WrapTd
-            onClick={() => this.onDaySelect(item.day, item.monthType)}
-            className={classname}
-            key={i}
-          >
+          <WrapTd onClick={() => this.onDaySelect(day, monthType)} className={classname} key={i}>
             <span>{fillZero(item.day)}</span>
           </WrapTd>
         );
@@ -187,20 +222,20 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
       <Wrap>
         <WrapHead>
           <div>
-            <span className="mr20" onClick={() => this.onChangeYear('pre')}>
-              《
+            <span className="mr20" onClick={() => this.onYearChange('pre')}>
+              {`<<`}
             </span>
-            <span className="mr20" onClick={() => this.onChangeMonth('pre')}>
+            <span className="mr20" onClick={() => this.onMonthChange('pre')}>
               {'<'}
             </span>
             <span>
-              {year}年{fillZero(month + 1)}月
+              {year}年{fillZero(month)}月
             </span>
-            <span className="ml20" onClick={() => this.onChangeMonth('next')}>
+            <span className="ml20" onClick={() => this.onMonthChange('next')}>
               {'>'}
             </span>
-            <span className="ml20" onClick={() => this.onChangeYear('next')}>
-              》
+            <span className="ml20" onClick={() => this.onYearChange('next')}>
+              {`>>`}
             </span>
           </div>
         </WrapHead>

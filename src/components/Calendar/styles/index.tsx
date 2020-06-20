@@ -25,6 +25,7 @@ export const WrapHead = styled.div`
   border-radius: 5px 5px 0 0;
   color: ${themeConfig.white};
   background-color: ${themeConfig.blue};
+  user-select: none;
   .ml20 {
     margin-left: 20px;
     cursor: pointer;
@@ -42,6 +43,11 @@ export const WrapWeekHead = styled.tr`
   color: ${themeConfig.fontBlack};
 `;
 
+const active = `
+  color: ${themeConfig.white};
+  background-color: ${themeConfig.blue};
+`;
+
 export const WrapTd = styled.td`
   padding: 4px;
   color: ${themeConfig.fontBlack};
@@ -52,8 +58,10 @@ export const WrapTd = styled.td`
     color: ${themeConfig.grey};
   }
   &.active span {
-    color: ${themeConfig.white};
-    background-color: ${themeConfig.blue};
+    ${active}
+  }
+  &.selected span {
+    ${active}
   }
   span {
     display: inline-block;
@@ -62,8 +70,7 @@ export const WrapTd = styled.td`
     line-height: 30px;
     border-radius: 50%;
     &:hover {
-      color: ${themeConfig.white};
-      background-color: ${themeConfig.blue};
+      ${active}
     }
   }
 `;
