@@ -196,8 +196,8 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
         const isCurrentMonthDay = monthType === 'current';
         const classname = classnames({
           grey: !isCurrentMonthDay,
-          active: isToday(day, monthType),
-          selected: isSelected(day)
+          active: isToday(day),
+          selected: isSelected(day, monthType)
         });
         return (
           <WrapTd onClick={() => this.onDaySelect(day, monthType)} className={classname} key={i}>
