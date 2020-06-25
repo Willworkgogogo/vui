@@ -53,7 +53,7 @@ export const WrapTd = styled.td`
   color: ${themeConfig.fontBlack};
   text-align: center;
   cursor: pointer;
-  outline: none;
+  user-select: none;
   &.grey {
     color: ${themeConfig.grey};
   }

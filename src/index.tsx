@@ -6,7 +6,7 @@ import Calendar from './components/Calendar';
 
 const H = () => (
   <ThemeProvider theme={themeConfig}>
-    <Calendar />
+    <Calendar onSelect={console.log} />
   </ThemeProvider>
 );
 

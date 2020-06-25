@@ -27,7 +27,7 @@ interface ICalendarState {
 
 class Calendar extends React.Component<ICalendarProps, ICalendarState> {
   static readonly WEEK_NAMES = ['日', '一', '二', '三', '四', '五', '六'];
-  static readonly MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  static readonly MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // 2月暂定28天，具体使用时会根据平/闰年重新计算天数
   static readonly LINES = [0, 1, 2, 3, 4, 5];
   static readonly FORMAT_DATE = 'M/D/YYYY';
 
@@ -40,27 +40,6 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
       selectedDate: ''
     };
   }
-
-  _getFullYear = (date: Date) => date.getFullYear();
-
-  _getMonth = (date: Date) => date.getMonth() + 1;
-
-  setCurrentYearMonth = (date: Date) => {
-    this.setState({
-      year: this._getFullYear(date),
-      month: this._getMonth(date),
-      selectedDate: ''
-    });
-  };
-
-  _getMonthDays = (date: Date) => {
-    const year = this._getFullYear(date);
-    const month = this._getMonth(date);
-    if (month === Month.February) {
-      return isLeepYear(year) ? FebruaryDays.leepYear : FebruaryDays.commonYear;
-    }
-    return Calendar.MONTH_DAYS[month - 1];
-  };
 
   getDateByYearMonthDay = (year: number, month: number, day: number = 1): Date => {
     return new Date(year, month - 1, day);
@@ -79,24 +58,34 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
     return new Date(year, lastMonth);
   };
 
+  _getFullYear = (date: Date) => date.getFullYear();
+  _getMonth = (date: Date) => date.getMonth() + 1; // 统一月份以1-12的自然数返回
+  _getMonthDays = (date: Date) => {
+    const year = this._getFullYear(date);
+    const month = this._getMonth(date);
+    if (month === Month.February) {
+      return isLeepYear(year) ? FebruaryDays.leepYear : FebruaryDays.commonYear;
+    }
+    return Calendar.MONTH_DAYS[month - 1];
+  };
   _getFilledMonthDays = (date: Date) => {
     return new Array(this._getMonthDays(date)).fill(0).map((_, i: number) => i + 1);
   };
 
-  getBeforeDays = (year: number, month: number): number[] => {
+  getFillBeforeDays = (year: number, month: number): number[] => {
     const lastMonthDate = this._getLastMonthDate(year, month);
     const days = this._getFilledMonthDays(lastMonthDate);
     const weekDay = this.getWeekOfMonthFirstDay(year, month);
     return days.slice(days.length - weekDay);
   };
 
-  getAfterDays = (year: number, month: number): number[] => {
+  getFillAfterDays = (year: number, month: number): number[] => {
     const weekLen = Calendar.WEEK_NAMES.length;
     const lineLen = Calendar.LINES.length;
     const daysSum = weekLen * lineLen;
     const date = this.getDateByYearMonthDay(year, month);
     const monthDays = this._getMonthDays(date);
-    const beforeDays = this.getBeforeDays(year, month);
+    const beforeDays = this.getFillBeforeDays(year, month);
     const afterDays = daysSum - beforeDays.length - monthDays;
     return new Array(afterDays).fill(0).map((_, i: number) => i + 1);
   };
@@ -104,8 +93,8 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
   getRenderFullDays = (year: number, month: number): ITdProps[] => {
     const formatTdItem = (days: number[], monthType: monthType) =>
       days.map(day => ({ day, monthType }));
-    const beforeDays = formatTdItem(this.getBeforeDays(year, month), 'pre');
-    const afterDays = formatTdItem(this.getAfterDays(year, month), 'next');
+    const beforeDays = formatTdItem(this.getFillBeforeDays(year, month), 'pre');
+    const afterDays = formatTdItem(this.getFillAfterDays(year, month), 'next');
     const date = this.getDateByYearMonthDay(year, month);
     const monthDays = formatTdItem(this._getFilledMonthDays(date), 'current');
     const days = beforeDays.concat(monthDays, afterDays);
@@ -119,38 +108,7 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
     } else {
       year -= 1;
     }
-    this.setState({ year });
-  };
-
-  onMonthChange = (direction: directionType) => {
-    let { month } = this.state;
-    const year = this.getYearOnMonthChange(month, direction);
-    if (direction === 'next') {
-      month === Month.December ? (month = Month.January) : (month += 1);
-    } else {
-      month === Month.January ? (month = Month.December) : (month -= 1);
-    }
-    this.setState({ year, month });
-  };
-
-  onDaySelect = (day: number, monthType: monthType) => {
-    let { year, month } = this.state;
-    let selectedDate = '';
-    if (monthType === 'current') {
-      selectedDate = `${month}/${day}/${year}`;
-    }
-    if (monthType === 'next') {
-      month === Month.December ? (month = Month.January) : (month += 1);
-      year === Month.December ? (year += 1) : year;
-      selectedDate = `${month}/${day}/${year}`;
-    }
-    if (monthType === 'pre') {
-      month === Month.January ? (month = Month.December) : (month -= 1);
-      year = Month.January ? (year -= 1) : year;
-      selectedDate = `${month}/${day}/${year}`;
-    }
-    this.setState({ year, month, selectedDate });
-    this.props.onSelect && this.props.onSelect(selectedDate);
+    this.setState({ year, selectedDate: '' });
   };
 
   getYearOnMonthChange = (month: number, direction: directionType): number => {
@@ -162,6 +120,39 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
       year -= 1;
     }
     return year;
+  };
+
+  onMonthChange = (direction: directionType) => {
+    let { month } = this.state;
+    const year = this.getYearOnMonthChange(month, direction);
+    if (direction === 'next') {
+      month === Month.December ? (month = Month.January) : (month += 1);
+    } else {
+      month === Month.January ? (month = Month.December) : (month -= 1);
+    }
+    this.setState({ year, month, selectedDate: '' });
+  };
+
+  onDaySelect = (day: number, monthType: monthType) => {
+    let { year, month } = this.state;
+    let selectedDate = '';
+    if (monthType === 'current') {
+      selectedDate = `${month}/${day}/${year}`;
+    }
+    if (monthType === 'next') {
+      const isLastMonth = month === Month.December;
+      isLastMonth ? (month = Month.January) : (month += 1);
+      isLastMonth ? (year += 1) : year;
+      selectedDate = `${month}/${day}/${year}`;
+    }
+    if (monthType === 'pre') {
+      const isFirstMonth = month === Month.January;
+      isFirstMonth ? (month = Month.December) : (month -= 1);
+      isFirstMonth ? (year -= 1) : year;
+      selectedDate = `${month}/${day}/${year}`;
+    }
+    this.setState({ year, month, selectedDate });
+    this.props.onSelect && this.props.onSelect(selectedDate);
   };
 
   renderTableHead = () => {
@@ -182,7 +173,7 @@ class Calendar extends React.Component<ICalendarProps, ICalendarState> {
     const isToday = (day: number) =>
       `${month}/${day}/${year}` === moment().format(Calendar.FORMAT_DATE);
     const isSelected = (day: number, monthType: monthType) => {
-      if (selectedDate) {
+      if (selectedDate && monthType === 'current') {
         return selectedDate === `${month}/${day}/${year}`;
       }
       return false;
