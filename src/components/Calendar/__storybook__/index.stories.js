@@ -9,4 +9,6 @@ export default {
   }
 };
 
-export const normal = () => <Calendar />;
+export const normal = () => <Calendar onSelect={console.log} />;
+
+export const fullscreen = () => <Calendar fullscreen />;
