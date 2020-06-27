@@ -7,8 +7,12 @@ import Collapse from './components/Collapse';
 const H = () => (
   <ThemeProvider theme={themeConfig}>
     <Collapse>
-      <Collapse.Panel header="标题1">11111</Collapse.Panel>
-      <Collapse.Panel header="标题2">22222</Collapse.Panel>
+      <Collapse.Panel header="标题1" key="1">
+        11111
+      </Collapse.Panel>
+      <Collapse.Panel header="标题2" key="2">
+        22222
+      </Collapse.Panel>
     </Collapse>
   </ThemeProvider>
 );
