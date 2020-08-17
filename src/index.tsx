@@ -6,7 +6,7 @@ import Collapse from './components/Collapse';
 
 const H = () => (
   <ThemeProvider theme={themeConfig}>
-    <Collapse>
+    <Collapse onChange={console.log} activeKey={[1,2]} accordion>
       <Collapse.Panel header="标题1" key="1">
         11111
       </Collapse.Panel>
