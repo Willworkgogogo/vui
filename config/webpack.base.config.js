@@ -31,6 +31,7 @@ module.exports = {
       manifest: root + '/dist/vendors-manifest.json'
     })
   ],
+  devtool: 'source-map',
   devServer: {
     contentBase: root + '/dist'
   }
