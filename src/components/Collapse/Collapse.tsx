@@ -2,6 +2,7 @@ import * as React from 'react';
 import Panel from './Panel';
 import { CollapseWrap } from './styles/index';
 
+import { getActiveKeys } from './utils';
 import { Const } from '@/utils/const';
 import classnames from 'classnames';
 
@@ -37,21 +38,18 @@ class Collapse extends React.Component<ICollapseProps, ICollapseState> {
   }
 
   componentDidMount() {
-    this.init();
+    /**
+     * handle default activeKeys
+     */
+    this.setState({ activeKeys: getActiveKeys(this.props.defaultActiveKey) });
+
+    /**
+     * handle invalid children
+     */
     if (!this.isValidChildren()) {
       throw new Error('the children should be instance of Collapse or Panel');
     }
   }
-
-  init = () => {
-    const { defaultActiveKey, activeKey } = this.props;
-    const key = activeKey || defaultActiveKey || [];
-    this.setState({
-      activeKeys: Array.isArray(key)
-        ? (key as (string | number)[]).map(key => String(key))
-        : [String(key)]
-    });
-  };
 
   isValidChildren = () => {
     if (

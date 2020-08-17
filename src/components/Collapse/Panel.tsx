@@ -25,7 +25,6 @@ class Panel extends React.Component<IPanelProps> {
 
   render() {
     const { header, children, showArrow = true, panelKey, isActive = false } = this.props;
-    console.log('Panel -> render -> panelKey', panelKey);
     const headerClassname = classnames({
       'hide-arrow': !showArrow
     });
