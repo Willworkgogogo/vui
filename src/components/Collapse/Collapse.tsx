@@ -17,6 +17,10 @@ export interface ICollapseProps {
   onChange?: (keys: string[]) => void;
   /* 是否显示边框 */
   bordered?: boolean;
+  /* 是否默认强制渲染 */
+  forceRender?: boolean;
+  /* 是否卸载未激活的Panel内容 */
+  destroyInactivePanel?: boolean;
 }
 
 interface ICollapseState {
@@ -49,6 +53,10 @@ class Collapse extends React.Component<ICollapseProps, ICollapseState> {
     if (!this.isValidChildren()) {
       throw new Error('the children should be instance of Collapse or Panel');
     }
+  }
+
+  componentDidUpdate(prevProps: ICollapseProps) {
+    // TODO support activeKeys
   }
 
   isValidChildren = () => {
@@ -86,7 +94,9 @@ class Collapse extends React.Component<ICollapseProps, ICollapseState> {
           panelKey: key,
           children: child.props.children,
           onItemClick: this.onItemClick,
-          isActive: this.state.activeKeys.includes(key)
+          isActive: this.state.activeKeys.includes(key),
+          forceRender: this.props.forceRender,
+          destroyInactivePanel: this.props.destroyInactivePanel
         };
         pre.push(React.cloneElement(child, props));
         return pre;

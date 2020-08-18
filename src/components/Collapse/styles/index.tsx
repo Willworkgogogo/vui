@@ -19,6 +19,10 @@ export const PanelWrap = styled.div`
 
 export const PanelHeader = styled.div`
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  white-space: nowrap;
   padding: 12px 16px;
   padding-left: 40px;
   border-bottom: 1px solid ${themeConfig.borderColor};
@@ -26,6 +30,10 @@ export const PanelHeader = styled.div`
   cursor: pointer;
   &.hide-arrow {
     padding-left: 16px;
+  }
+  &.disabled {
+    color: rgba(0, 0, 0, 0.25);
+    cursor: not-allowed;
   }
 `;
 
