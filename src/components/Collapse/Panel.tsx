@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PanelWrap, PanelHeader } from './styles/index';
-import PanelBody from './PanelBody';
+import PanelBody from './panel-body';
 
 import classnames from 'classnames';
 

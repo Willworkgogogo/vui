@@ -1,2 +1,2 @@
-import Collapse from './Collapse';
+import Collapse from './collapse';
 export default Collapse;

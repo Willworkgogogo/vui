@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Panel from './Panel';
+import Panel from './panel';
 import { CollapseWrap } from './styles/index';
 
 import { getActiveKeys } from './utils';
