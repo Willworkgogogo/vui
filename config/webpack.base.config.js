@@ -21,7 +21,17 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js', '.json']
   },
   module: {
-    rules: [{ test: /.tsx?$/, loader: 'ts-loader' }]
+    rules: [
+      { test: /\.tsx?$/, loader: 'ts-loader' },
+      {
+        test: /\.svg$/,
+        loader: 'svg-sprite-loader',
+        include: [srcRoot + '/icons'],
+        options: {
+          symbolId: 'icon-[name]'
+        }
+      }
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
