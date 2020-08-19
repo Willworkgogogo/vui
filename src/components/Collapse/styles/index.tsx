@@ -19,8 +19,6 @@ export const PanelWrap = styled.div`
 
 export const PanelHeader = styled.div`
   position: relative;
-  display: flex;
-  justify-content: space-between;
   overflow: hidden;
   white-space: nowrap;
   padding: 12px 16px;
@@ -34,6 +32,19 @@ export const PanelHeader = styled.div`
   &.disabled {
     color: rgba(0, 0, 0, 0.25);
     cursor: not-allowed;
+  }
+  .arrow {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s;
+  }
+  .arrow-down {
+    transform: translateY(-50%) rotate(90deg);
+  }
+  .fr {
+    float: right;
   }
 `;
 

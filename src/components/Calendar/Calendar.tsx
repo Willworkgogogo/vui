@@ -3,7 +3,6 @@ import * as moment from 'moment';
 import classnames from 'classnames';
 import { isLeepYear, fillZero } from '@/utils';
 import { Month, FebruaryDays } from '@/utils/types';
-import { Const } from '@/utils/const';
 import { Wrap, WrapHead, WrapWeekHead, WrapTd } from './styles';
 
 type monthType = 'pre' | 'current' | 'next';

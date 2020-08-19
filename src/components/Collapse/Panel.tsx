@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { PanelWrap, PanelHeader } from './styles/index';
 import PanelBody from './panel-body';
+import Icon from '../icon';
 
 import classnames from 'classnames';
 
@@ -50,12 +51,20 @@ class Panel extends React.Component<IPanelProps> {
       'hide-arrow': !showArrow,
       disabled: disabled
     });
+    const arrowClassname = classnames('arrow',{
+      'arrow-down': isActive
+    })
 
     return (
       <PanelWrap>
         <PanelHeader className={headerClassname} onClick={() => this.onClick(panelKey)}>
-          <span>{header}</span>
-          <span>{extra}</span>
+          <span className={arrowClassname}>
+            <Icon type="arrow_right" />
+          </span>
+          <span>
+            {header}
+          </span>
+          <span className="fr">{extra}</span>
         </PanelHeader>
         <PanelBody
           isActive={isActive}

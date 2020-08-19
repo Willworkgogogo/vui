@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Wrap, WrapDot, WrapBase } from './styles';
-import { themeConfig } from '@/theme';
 import * as _ from 'lodash';
 
 interface IBadgeProps {
