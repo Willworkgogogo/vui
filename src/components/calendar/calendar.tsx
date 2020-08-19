@@ -14,9 +14,13 @@ interface ITdProps {
 }
 
 interface ICalendarProps {
-  /* 日期选中后的回调 */
+  /**
+   * 日期选中后的回调
+   */
   onSelect?: (date: string) => void;
-  /* 是否全屏显示 */
+  /**
+   * 是否全屏显示
+   */
   fullscreen?: boolean;
 }
 

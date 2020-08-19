@@ -7,19 +7,33 @@ import { Const } from '@/utils/const';
 import classnames from 'classnames';
 
 export interface ICollapseProps {
-  /* 当前激活面板的key */
+  /**
+   * 当前激活面板的key
+   */
   activeKey?: string[] | string | number[] | number;
-  /* 默认激活面板的key */
+  /**
+   * 默认激活面板的key
+   */
   defaultActiveKey?: string[] | string | number[] | number;
-  /* 手风琴模式 */
+  /**
+   * 手风琴模式
+   */
   accordion?: boolean;
-  /* 切换面板的回调 */
+  /**
+   * 切换面板的回调
+   */
   onChange?: (keys: string[]) => void;
-  /* 是否显示边框 */
+  /**
+   * 是否显示边框
+   */
   bordered?: boolean;
-  /* 是否默认强制渲染 */
+  /**
+   * 是否默认强制渲染
+   */
   forceRender?: boolean;
-  /* 是否卸载未激活的Panel内容 */
+  /**
+   * 是否卸载未激活的Panel内容
+   */
   destroyInactivePanel?: boolean;
 }
 

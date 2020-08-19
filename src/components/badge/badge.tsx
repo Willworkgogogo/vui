@@ -3,15 +3,25 @@ import { Wrap, WrapDot, WrapBase } from './styles';
 import * as _ from 'lodash';
 
 interface IBadgeProps {
-  /** 定义徽标的颜色 */
+  /**
+   * 定义徽标的颜色
+  */
   color?: string;
-  /** 数字或者自定义内容 */
+  /**
+   * 数字或者自定义内容
+  */
   count?: React.ReactNode;
-  /** 显示红点，不显示数字 */
+  /**
+   * 显示红点，不显示数字
+  */
   dot?: boolean;
-  /** 当数值为0时是否显示 */
+  /**
+   * 当数值为0时是否显示
+  */
   showZero?: boolean;
-  /** 设置数值显示的上限 */
+  /**
+   * 设置数值显示的上限
+  */
   overflowCount?: number;
   style?: React.CSSProperties;
 }
