@@ -16,7 +16,7 @@ const H = () => (
         22222
       </Collapse.Panel>
     </Collapse>
-    <Icon type="arrow-up" />
+    <Icon type="arrow_up" />
   </ThemeProvider>
 );
 
