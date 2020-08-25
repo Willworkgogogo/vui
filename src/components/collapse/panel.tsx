@@ -51,19 +51,17 @@ class Panel extends React.Component<IPanelProps> {
       'hide-arrow': !showArrow,
       disabled: disabled
     });
-    const arrowClassname = classnames('arrow',{
+    const arrowClassname = classnames('arrow', {
       'arrow-down': isActive
-    })
+    });
 
     return (
       <PanelWrap>
         <PanelHeader className={headerClassname} onClick={() => this.onClick(panelKey)}>
           <span className={arrowClassname}>
-            <Icon type="arrow_right" />
+            <Icon type="arrow-right" />
           </span>
-          <span>
-            {header}
-          </span>
+          <span>{header}</span>
           <span className="fr">{extra}</span>
         </PanelHeader>
         <PanelBody

@@ -11,13 +11,13 @@ export default {
 
 export const 普通 = () => (
   <>
-    <Icon type="arrow_up" />
-    <Icon type="arrow_right" />
-    <Icon type="arrow_down" />
-    <Icon type="arrow_left" />
+    <Icon type="arrow-up" />
+    <Icon type="arrow-right" />
+    <Icon type="arrow-down" />
+    <Icon type="arrow-left" />
     <Icon type="lock" />
     <Icon type="unlock" />
   </>
 );
 
-export const 修改属性 = () => <Icon type="benefits" width="40" height="40" color="red" />;
+export const 修改属性 = () => <Icon type="benefits" width="40" height="40" color="green" />;

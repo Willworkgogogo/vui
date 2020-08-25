@@ -1,34 +1,45 @@
 import * as React from 'react';
-import { IconWrap } from './styles';
-
-interface IIconProps {
+import ArrowUp from './icons/arrow-up';
+import ArrowRight from './icons/arrow-right';
+import ArrowDown from './icons/arrow-down';
+import ArrowLeft from './icons/arrow-left';
+import Benefits from './icons/benefits';
+import List from './icons/list';
+import Lock from './icons/lock';
+import UnLock from './icons/unlock';
+export interface IIconProps {
   /**
    * 图标名称
-  */
+   */
   type: string;
   /**
    * 宽度
-  */
+   */
   width?: string;
   /**
    * 高度
-  */
+   */
   height?: string;
   /**
    * 颜色
-  */
+   */
   color?: string;
 }
 
-class Icon extends React.Component<IIconProps> {
+const IconMap = new Map<string, Function>();
+IconMap.set('arrow-up', ArrowUp);
+IconMap.set('arrow-right', ArrowRight);
+IconMap.set('arrow-down', ArrowDown);
+IconMap.set('arrow-left', ArrowLeft);
+IconMap.set('benefits', Benefits);
+IconMap.set('list', List);
+IconMap.set('lock', Lock);
+IconMap.set('unlock', UnLock);
+
+export default class Icon extends React.Component<IIconProps> {
   render() {
-    const { type, width, height, color } = this.props;
-    return (
-      <IconWrap aria-hidden="true" xmlns="http://www.w3.org/2000/svg" focusable="false" role="presentation" width={width} height={height} fill={color}>
-        {type && require(`../../icons/svg/${type}.svg`)}
-      </IconWrap>
-    );
+    const { type, ...rest } = this.props;
+    const Comp = IconMap.get(type);
+    return Comp ? <Comp {...rest} /> : null;
   }
 }
-
-export default Icon;

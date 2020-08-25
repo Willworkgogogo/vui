@@ -4,7 +4,6 @@ import { ThemeProvider } from 'styled-components';
 import { themeConfig } from './theme';
 import Collapse from './components/collapse';
 import Icon from './components/icon';
-import '@/icons';
 
 const H = () => (
   <ThemeProvider theme={themeConfig}>
@@ -16,7 +15,13 @@ const H = () => (
         22222
       </Collapse.Panel>
     </Collapse>
-    <Icon type="arrow_up" />
+    <Icon type="arrow-up" />
+    <Icon type="arrow-right" />
+    <Icon type="arrow-down" />
+    <Icon type="arrow-left" />
+    <Icon type="benefits" />
+    <Icon type="list" />
+    <Icon type="lock" />
   </ThemeProvider>
 );
 
