@@ -11,19 +11,38 @@ export default {
 
 export const 普通 = () => (
   <>
-    <Icon type="arrow-up" />
-    <Icon type="arrow-right" />
-    <Icon type="arrow-down" />
-    <Icon type="arrow-left" />
-    <Icon type="lock" />
-    <Icon type="unlock" />
-    <Icon type="lock" />
-    <Icon type="turn-left" />
-    <Icon type="turn-right" />
-    <Icon type="turn-top" />
-    <Icon type="turn-down" />
-    <Icon type="search" />
-    <Icon type="setting" />
+    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      {[
+        'arrow-up',
+        'arrow-right',
+        'arrow-down',
+        'arrow-left',
+        'lock',
+        'unlock',
+        'turn-left',
+        'turn-right',
+        'turn-down',
+        'turn-top',
+        'search',
+        'setting',
+      ].map((type) => (
+        <div
+          style={{
+            flex: '90px 0 0',
+            marginRight: 10,
+            marginBottom: 10,
+            padding: 10,
+            textAlign: 'center',
+            backgroundColor: '#ddd',
+            borderRadius: 5,
+          }}
+        >
+          <Icon type={type} />
+          <br />
+          <code>{type}</code>
+        </div>
+      ))}
+    </div>
   </>
 );
 

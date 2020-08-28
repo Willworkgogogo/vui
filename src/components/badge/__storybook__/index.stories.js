@@ -2,7 +2,7 @@ import * as React from 'react';
 import Badge from '../index.tsx';
 
 export default {
-  title: 'Data Show/Badge 徽标数',
+  title: '数据展示/Badge 徽标数',
   component: Badge,
   parameters: {
     componentSubtitle: '图标右上角的圆形徽标数字。'

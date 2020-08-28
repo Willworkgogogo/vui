@@ -2,7 +2,7 @@ import * as React from 'react';
 import Collapse from '../index';
 
 export default {
-  title: 'Data Show/Collapse 折叠面板',
+  title: '数据展示/Collapse 折叠面板',
   component: Collapse,
   parameters: {
     componentSubtitle: '可以折叠/展开的内容区域'

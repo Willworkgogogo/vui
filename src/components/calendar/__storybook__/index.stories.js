@@ -2,7 +2,7 @@ import * as React from 'react';
 import Calendar from '../index';
 
 export default {
-  title: 'Data Show/Calendar 日历',
+  title: '数据展示/Calendar 日历',
   component: Calendar,
   parameters: {
     componentSubtitle: '日期选择'
