@@ -26,7 +26,7 @@ interface IBadgeProps {
   style?: React.CSSProperties;
 }
 
-export class Badge extends React.Component<IBadgeProps> {
+class Badge extends React.Component<IBadgeProps> {
   static defaultProps = {
     style: {},
     dot: false,
