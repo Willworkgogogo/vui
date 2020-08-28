@@ -7,6 +7,13 @@ import Benefits from './icons/benefits';
 import List from './icons/list';
 import Lock from './icons/lock';
 import UnLock from './icons/unlock';
+import TurnLeft from './icons/turn-left';
+import TurnRight from './icons/turn-right';
+import Search from './icons/search';
+import Setting from './icons/setting';
+import TurnTop from './icons/turn-top';
+import TurnDown from './icons/turn-down';
+
 export interface IIconProps {
   /**
    * 图标名称
@@ -35,6 +42,12 @@ IconMap.set('benefits', Benefits);
 IconMap.set('list', List);
 IconMap.set('lock', Lock);
 IconMap.set('unlock', UnLock);
+IconMap.set('turn-left', TurnLeft);
+IconMap.set('turn-right', TurnRight);
+IconMap.set('turn-top', TurnTop);
+IconMap.set('turn-down', TurnDown);
+IconMap.set('search', Search);
+IconMap.set('setting', Setting);
 
 export default class Icon extends React.Component<IIconProps> {
   render() {

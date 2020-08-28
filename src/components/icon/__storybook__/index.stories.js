@@ -5,8 +5,8 @@ export default {
   title: '通用/Icon 图标',
   component: Icon,
   parameters: {
-    componentSubtitle: '语义化的矢量图形'
-  }
+    componentSubtitle: '语义化的矢量图形',
+  },
 };
 
 export const 普通 = () => (
@@ -17,6 +17,13 @@ export const 普通 = () => (
     <Icon type="arrow-left" />
     <Icon type="lock" />
     <Icon type="unlock" />
+    <Icon type="lock" />
+    <Icon type="turn-left" />
+    <Icon type="turn-right" />
+    <Icon type="turn-top" />
+    <Icon type="turn-down" />
+    <Icon type="search" />
+    <Icon type="setting" />
   </>
 );
 

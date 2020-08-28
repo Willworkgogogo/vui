@@ -22,6 +22,12 @@ const H = () => (
     <Icon type="benefits" />
     <Icon type="list" />
     <Icon type="lock" />
+    <Icon type="turn-left" />
+    <Icon type="turn-right" />
+    <Icon type="turn-top" />
+    <Icon type="turn-down" />
+    <Icon type="search" />
+    <Icon type="setting" />
   </ThemeProvider>
 );
 
